@@ -1,0 +1,45 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/freemobile-api",
+    "crates/cli"
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["davlgd"]
+license = "Apache-2.0"
+repository = "https://github.com/davlgd/send-sms"
+homepage = "https://github.com/davlgd/send-sms"
+rust-version = "1.88"
+
+[workspace.dependencies]
+clap = { version = "4.0", features = ["derive", "env"] }
+dotenv = "0.15"
+inquire = "0.7"
+is-terminal = { version = "0.4", default-features = false }
+regex = { version = "1.11", default-features = false, features = ["std", "unicode"] }
+reqwest = { version = "0.12", features = ["rustls-tls"], default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+tokio = { version = "1.47", features = ["rt-multi-thread", "signal", "time", "macros"] }
+unicode-segmentation = { version = "1.12", default-features = false }
+
+# Development dependencies
+assert_cmd = "2.0"
+predicates = "3.1"
+tempfile = "3.21"
+tokio-test = "0.4"
+
+[profile.release]
+opt-level = "z"          # Optimize for size
+lto = "fat"              # Full link-time optimization
+codegen-units = 1        # Single codegen unit for better optimization
+panic = "abort"          # Smaller binaries
+strip = true             # Strip symbols from binary
+debug = false            # No debug info in release
+overflow-checks = false  # Disable runtime overflow checks
+
+[profile.release.package."*"]
+opt-level = "z"          # Optimize dependencies for size too
